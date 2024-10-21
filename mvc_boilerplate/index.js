@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
 const mongoose = require('mongoose');
 const blogRouter = require('./routes/blog.route');
 const config = require('./config/config');
-const { errorHandler } = require('./middlewares/error');
+// import middleware
+const { errorHandler, errorConverter } = require('./middlewares/error'); 
+const ApiError = require('./utils/ApiError');
+const httpStatus = require('http-status');
  
 mongoose
   .connect(config.dbConnection)
@@ -17,8 +19,11 @@ mongoose
  
 app.use(express.json());
 app.use(blogRouter);
-app.use(errorHandler);
  
-app.listen(config.port, () => {
-  console.log('server listening on port 3000');
+// Add the error converter before the error handler
+app.use(errorConverter);
+app.use(errorHandler); 
+ 
+const server = app.listen(config.port, () => {
+  console.log(`server listening on port ${config.port}`);
 });
