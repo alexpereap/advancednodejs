@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const http = require('http');
 const config = require('./config/config');
 const app = require('./server');
+const logger = require('./config/logger');
  
 mongoose
   .connect(config.dbConnection)
@@ -14,7 +15,7 @@ mongoose
  
 const httpServer = http.createServer(app);
 const server = httpServer.listen(config.port, () => {
-  console.log(`server listening on port ${config.port}`);
+  logger.info(`server listening on port ${config.port}`);
 });
  
 const exitHandler = () => {
