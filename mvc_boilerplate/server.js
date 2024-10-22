@@ -4,6 +4,8 @@ const blogRouter = require('./routes/blog.route');
 const { errorHandler, errorConverter } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const httpStatus = require('http-statuses');
+const morgan = require('./config/morgan');
+app.use(morgan);
  
 app.use(express.json());
 app.use(blogRouter);

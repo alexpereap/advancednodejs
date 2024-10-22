@@ -30,14 +30,14 @@ const exitHandler = () => {
 };
  
 const unExpectedErrorHandler = (error) => {
-  console.log(error);
+  logger.error(error);
   exitHandler();
 };
  
 process.on('uncaughtException', unExpectedErrorHandler);
 process.on('unhandledRejection', unExpectedErrorHandler);
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received');
+  logger.info('SIGTERM received');
   if (server) {
     server.close();
   }
