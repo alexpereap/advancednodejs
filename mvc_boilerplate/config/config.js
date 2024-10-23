@@ -11,4 +11,8 @@ module.exports = {
   port: envVars.PORT,
   dbConnection: envVars.DB_CONNECTION,
   env: envVars.ENVIRONMENT,
+  jwt: {
+    secret: envVars.JWT_SECRET,
+    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+  },
 };
