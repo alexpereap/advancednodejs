@@ -9,7 +9,12 @@ const createUser = async (userBody) => {
   const user = await User.create(userBody);
   return user;
 };
- 
+
+const getUserByEmail = async (email) => {
+  return await User.findOne({ email });
+};
+
 module.exports = {
   createUser,
+  getUserByEmail
 };
