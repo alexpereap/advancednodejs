@@ -4,19 +4,48 @@ const config = require('./../config/config');
 const { tokenTypes } = require('./../config/tokens');
  
 // Function to generate a JWT for a given user ID
-const generateAuthToken = (userId) => {
-  // Payload includes subject (user ID), issued at time, expiration time, and token type
+const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   const payload = {
     sub: userId,
-    iat: dayjs().unix(), // Issued at: current Unix timestamp
-    exp: dayjs().add(config.jwt.JWT_ACCESS_EXPIRATION_MINUTES, 'minutes').unix(), // Expires in 30 minutes
-    type: tokenTypes.ACCESS, // Token type: access
+    iat: dayjs().unix(),
+    exp: expires.unix(),
+    type,
   };
- 
-  // Sign the token with the secret key
-  return jwt.sign(payload, config.jwt.secret);
+  return jwt.sign(payload, secret);
+};
+
+const generateAuthTokens = (userId) => {
+  const accessTokenExpires = dayjs().add(
+    config.jwt.accessExpirationMinutes,
+    'minutes'
+  );
+  const accessToken = generateToken(
+    userId,
+    accessTokenExpires,
+    tokenTypes.ACCESS
+  );
+  const refreshTokenExpires = dayjs().add(
+    config.jwt.refreshExpirationDays,
+    'days'
+  );
+  const refreshToken = generateToken(
+    userId,
+    refreshTokenExpires,
+    tokenTypes.REFRESH
+  );
+  return {
+    access: {
+      token: accessToken,
+      expires: accessTokenExpires.toDate(),
+    },
+    refresh: {
+      token: refreshToken,
+      expires: refreshTokenExpires.toDate(),
+    },
+  };
 };
  
 module.exports = {
-  generateAuthToken,
+  generateToken,
+  generateAuthTokens
 };
