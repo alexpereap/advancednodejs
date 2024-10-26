@@ -16,5 +16,11 @@ router.post(
   validate(authValidation.loginSchema),
   authController.login
 );
+
+router.post(
+  '/auth/refresh-token',
+  validate(authValidation.refreshTokenSchema),
+  authController.refreshToken
+);
  
 module.exports = router;

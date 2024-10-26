@@ -14,12 +14,19 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.login(email, password);
+
   // generate token
   const tokens = await tokenService.generateAuthTokens(user.id);
   res.status(httpStatus.OK.code).send({ user, tokens });
 });
 
+const refreshToken = catchAsync(async (req, res) => {
+  const tokens = await authService.refreshAuthToken(req.body.refreshToken);
+  res.status(httpStatus.OK.code).send({ ...tokens });
+});
+
 module.exports = {
   register,
   login,
+  refreshToken,
 };

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { tokenTypes } = require('../config/tokens');
+const toJson = require('@meanie/mongoose-to-json');
  
 const tokenSchema = mongoose.Schema(
   {
