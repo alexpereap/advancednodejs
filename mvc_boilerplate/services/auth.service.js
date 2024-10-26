@@ -1,5 +1,5 @@
 const userService = require('./user.service');
-const httpStatus = require('http-status');
+const httpStatus = require('http-statuses');
 const ApiError = require('../utils/ApiError');
  
 const login = async (email, password) => {
