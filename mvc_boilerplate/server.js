@@ -6,7 +6,12 @@ const { errorHandler, errorConverter } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const httpStatus = require('http-statuses');
 const morgan = require('./config/morgan');
+const passport = require('passport');
+const { jwtStrategy } = require('./config/passport');
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
 app.use(morgan);
+
  
 app.use(express.json());
 app.use(blogRouter);
