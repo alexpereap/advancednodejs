@@ -8,12 +8,14 @@ const httpStatus = require('http-statuses');
 const morgan = require('./config/morgan');
 const passport = require('passport');
 const { jwtStrategy } = require('./config/passport');
+const {xss} = require("express-xss-sanitizer")
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
 app.use(morgan);
 
  
 app.use(express.json());
+app.use(xss())
 app.use(blogRouter);
 app.use(authRouter);
  
