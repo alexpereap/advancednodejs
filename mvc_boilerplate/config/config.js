@@ -29,5 +29,7 @@ module.exports = {
       fontSrc: ["'self'", "'unsafe-inline'"],
     },
     reportOnly: true
-  }
+  },
+  email: process.env.EMAIL,
+  emailPassword: process.env.EMAIL_PASSWORD,
 };
