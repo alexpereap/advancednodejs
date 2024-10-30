@@ -11,14 +11,18 @@ const { jwtStrategy } = require('./config/passport');
 const {xss} = require("express-xss-sanitizer")
 const helmet = require("helmet")
 const config = require("./config/config")
+const mongoSanitize = require("express-mongo-sanitize")
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
+app.use(mongoSanitize());
 app.use(morgan);
 
  
 app.use(express.json());
 app.use(helmet.contentSecurityPolicy(config.cspOptions));
-app.use(xss())
+app.use(helmet.frameguard({ action: 'sameorigin' }));
+app.use(helmet.noSniff());
+app.use(xss());
 app.use(blogRouter);
 app.use(authRouter);
  
