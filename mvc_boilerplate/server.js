@@ -12,6 +12,8 @@ const {xss} = require("express-xss-sanitizer")
 const helmet = require("helmet")
 const config = require("./config/config")
 const mongoSanitize = require("express-mongo-sanitize")
+const { cspOptions, env } = require("./config/config")
+const cors = require('cors')
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
 app.use(mongoSanitize());
@@ -32,5 +34,14 @@ app.use((req, res, next) => {
  
 app.use(errorConverter);
 app.use(errorHandler);
+
+if (env === 'production') {
+  app.use(cors({ origin: 'url' }));
+  app.options('*', cors({ origin: 'url' }));
+} else {
+  // enabling all cors
+  app.use(cors());
+  app.options('*', cors());
+}
  
 module.exports = app;
