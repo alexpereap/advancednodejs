@@ -9,6 +9,9 @@ const blogSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  coverImage: {
+    type: String,
+  },
   createdBy:{
     type: String,
     ref: "User",
