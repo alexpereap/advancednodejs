@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const toJson = require('@meanie/mongoose-to-json');
  
 const blogSchema = mongoose.Schema({
   title: {
@@ -17,6 +18,11 @@ const blogSchema = mongoose.Schema({
     ref: "User",
     required: true
   }
+},{
+   timestamps: true,
 });
+
+blogSchema.plugin(toJson);
+
 const Blog = mongoose.model('Blog', blogSchema);
 module.exports = Blog;

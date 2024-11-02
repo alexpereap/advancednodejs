@@ -19,6 +19,11 @@ const getBlogs = catchAsync(async (req, res, next) => {
   res.json(blogs);
 });
 
+const getRecentBlogs = catchAsync(async (req, res, next) => {
+  const blogs = await blogService.getRecentBlogs();
+  res.status(httpStatus.OK.code).json(blogs);
+});
+
 const uploadFile = catchAsync(async (req, res) => {
   if (!req.file) {
     throw new ApiError(httpStatus.NOT_FOUND.code, 'File not found');
@@ -43,4 +48,5 @@ module.exports = {
   getBlogs,
   uploadFile,
   getFile,
+  getRecentBlogs,
 };
