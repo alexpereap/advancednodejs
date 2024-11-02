@@ -3,7 +3,7 @@ const upload = require('../utils/multer');
 const router = express.Router();
 const { createBlogSchema, getBlogSchema } = require('./../validations/blog.validation');
 const validate = require('./../middlewares/validate');
-const { createBlog, getBlogs, uploadFile } = require('./../controllers/blog.controller');
+const { createBlog, getBlogs, uploadFile, getFile } = require('./../controllers/blog.controller');
 const auth = require('../middlewares/auth');
  
 // Route to get all blogs
@@ -17,6 +17,12 @@ router.post(
     auth,
     upload.single('coverImage'),
     uploadFile
+);
+
+router.get(
+    '/blog/image/:filename',
+    auth,
+    getFile
 );
  
 module.exports = router;
