@@ -3,6 +3,8 @@ const Blog = require('./../models/blog.model');
 const catchAsync = require('./../utils/catchAsync');
 const httpStatus = require('http-statuses');
 const blogService = require('./../services/blog.service');
+const imageProcessorQueue = require('../background-tasks/queues/image-processor');
+const workers = require('../background-tasks/workers');
  
 const createBlog = catchAsync(async (req, res, next) => {
   await Blog.create({...req.body, createdBy: req.user.id});
@@ -20,7 +22,10 @@ const uploadFile = catchAsync(async (req, res) => {
   if (!req.file) {
     throw new ApiError(httpStatus.NOT_FOUND.code, 'File not found');
   }
-  const fileName = await blogService.uploadFile(req.file);
+
+  const fileName = `image-${Date.now()}.webp`;
+  await imageProcessorQueue.add('ImageProcessorJob', { fileName, file: req.file, fileBuffer: req.file.buffer.toString('hex') });
+  await workers.start();
   res.status(httpStatus.OK.code).json({fileName});
 });
 

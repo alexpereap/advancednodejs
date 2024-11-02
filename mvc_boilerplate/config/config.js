@@ -32,4 +32,8 @@ module.exports = {
   },
   email: process.env.EMAIL,
   emailPassword: process.env.EMAIL_PASSWORD,
+  redis: {
+    host: envVars.REDIS_HOST,
+    port: envVars.REDIS_PORT,
+  },
 };
