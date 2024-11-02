@@ -2,10 +2,7 @@ const ApiError = require('../utils/ApiError');
 const  Blog = require('./../models/blog.model');
 const fs = require('fs');
 const httpStatus = require('http-statuses');
-
-const uploadFile = async () => {
-
-}
+const sharp = require('sharp');
 
 const getReadableFileStream = async (filename) => {
     const filePath = `${__dirname}/../uploads/${filename}`;
@@ -15,6 +12,13 @@ const getReadableFileStream = async (filename) => {
 
     const stream = fs.createReadStream(filePath);
     return stream;
+};
+
+const uploadFile = async (file) => {
+    const filename = `image-${Date.now()}.webp`;
+    const outputPath = `${__dirname}/../uploads/${filename}`;
+    sharp(file.buffer).resize(600).webp({ lossless: true }).toFile(outputPath);
+    return filename;
 };
 
 module.exports = {

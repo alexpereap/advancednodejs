@@ -3,7 +3,6 @@ const Blog = require('./../models/blog.model');
 const catchAsync = require('./../utils/catchAsync');
 const httpStatus = require('http-statuses');
 const blogService = require('./../services/blog.service');
-const path = require('path');
  
 const createBlog = catchAsync(async (req, res, next) => {
   await Blog.create({...req.body, createdBy: req.user.id});
@@ -21,8 +20,8 @@ const uploadFile = catchAsync(async (req, res) => {
   if (!req.file) {
     throw new ApiError(httpStatus.NOT_FOUND.code, 'File not found');
   }
-  const filePath = await blogService.uploadFile(req.body);
-  res.status(httpStatus.OK.code).json({fileName: req.file.filename});
+  const fileName = await blogService.uploadFile(req.file);
+  res.status(httpStatus.OK.code).json({fileName});
 });
 
 const getFile = catchAsync(async (req, res) => {
