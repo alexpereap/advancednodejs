@@ -2,7 +2,7 @@ const ApiError = require('../utils/ApiError');
 const  Blog = require('./../models/blog.model');
 const fs = require('fs');
 const httpStatus = require('http-statuses');
-const redisClient = require('../config/redis');
+const { CacheProcessor } = require('../background-tasks');
 
 const getReadableFileStream = async (filename) => {
     const filePath = `${__dirname}/../uploads/${filename}`;
@@ -18,7 +18,10 @@ const getRecentBlogs = async () => {
     const blogs = await Blog.find().sort({
         createdAt: -1,
     }).limit(3);
-    redisClient.set('recent-blogs', JSON.stringify(blogs));
+
+    t1 = {blogs};
+    await CacheProcessor.Queue.add('CacheProcessorJob', { blogs } )
+    await CacheProcessor.startWorker();
 
     return blogs;
 };

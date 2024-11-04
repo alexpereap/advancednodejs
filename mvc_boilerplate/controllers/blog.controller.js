@@ -31,7 +31,7 @@ const uploadFile = catchAsync(async (req, res) => {
 
   const fileName = `image-${Date.now()}.webp`;
   await ImageProcessor.Queue.add('ImageProcessorJob', { fileName, file: req.file, fileBuffer: req.file.buffer.toString('hex') });
-  await workers.start();
+  await ImageProcessor.startWorker();
   res.status(httpStatus.OK.code).json({fileName});
 });
 
