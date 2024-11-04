@@ -19,9 +19,7 @@ const getRecentBlogs = async () => {
         createdAt: -1,
     }).limit(3);
 
-    t1 = {blogs};
     await CacheProcessor.Queue.add('CacheProcessorJob', { blogs } )
-    await CacheProcessor.startWorker();
 
     return blogs;
 };

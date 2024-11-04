@@ -5,6 +5,8 @@ const logger = require('../config/logger');
 const subscribers = require('../subscribers');
 const EventEmitter = require('../utils/EventEmitter');
 const redisClient = require('../config/redis');
+const createworker = require('../background-tasks/workers');
+const path = require('path');
  
 module.exports = async (app) => {
   await mongooseLoader();
@@ -22,5 +24,14 @@ module.exports = async (app) => {
     if (err) {
       await fs.promises.mkdir('uploads');
     }
+  });
+
+  const workers = [
+    {name: 'ImageProcessor', filename: 'image-processor.js'},
+    {name: 'CacheProcessor', filename: 'cache-processor.js'}
+  ];
+
+  workers.forEach(async (worker) => {
+    await createworker(worker.name, worker.filename);
   });
 };
