@@ -5,7 +5,7 @@ const createBlogSchema = {
   body: joi.object().keys({
     title: joi.string().required(),
     description: joi.string().required(),
-    createdBy:joi.string().required().custom(objectId)
+    // createdBy:joi.string().required().custom(objectId)
   }),
 };
 

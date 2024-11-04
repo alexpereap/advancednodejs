@@ -6,9 +6,11 @@ const blogService = require('./../services/blog.service');
 const imageProcessorQueue = require('../background-tasks/queues/image-processor');
 const workers = require('../background-tasks/workers');
 const { ImageProcessor } = require('../background-tasks');
+const redisClient = require('../config/redis');
  
 const createBlog = catchAsync(async (req, res, next) => {
   await Blog.create({...req.body, createdBy: req.user.id});
+  redisClient.del('recent-blogs');
   res.send({ success: true, message: 'Blog created successfully' });
 });
  
